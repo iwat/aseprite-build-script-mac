@@ -1,12 +1,11 @@
 # Aseprite-Build-Script-Mac
 
 **Created by [Chasnah](https://chasnah.com/)**
+**Modified by [Chaiwat](https://github.com/iwat/)**
 
-## A customizable, automated macOS Zsh script for easily compiling Aseprite
+## An automated macOS Zsh script for easily compiling Aseprite
 
-Please refer to Aseprite's [INSTALL.md](https://github.com/aseprite/aseprite/blob/v1.3.14.4/INSTALL.md) to check for any updates to Aseprite installation procedure.
-
-This script was tested in macOS Sonoma on a M1 Pro Macbook Pro. This script will target either Intel x86_64 or Apple Silicon arm64 based on what architecture is selected in paths.
+This script was tested in macOS Tahoe on an M4 Macbook Air. This script will detect either Intel x86_64 or Apple Silicon arm64, then build Aseprite for the detected CPU architecture.
 
 As long as all dependencies are met and all paths are correct this script will automatically download and extract
 both the Aseprite source code and a pre-built package of Skia then run the build process.
@@ -25,49 +24,23 @@ both the Aseprite source code and a pre-built package of Skia then run the build
 
          xcode-select --install
 
-## Explanation of Paths
+## Selecting version
 
-The user customizable portion of this script consists of paths. Most of these paths can be changed to better fit your build environment. Below is a short description of each path in order of appearance.
+1. Visit https://github.com/aseprite/aseprite/releases
+2. Find the version you want. It would be wise to not select a beta version
+3. Expand **Assets** if it's not already expanded
+4. Find `Aseprite-v#.##.##-Source.zip`, copy the URL. It should look like `https://github.com/aseprite/aseprite/releases/download/v{TAG_VERSION}/Aseprite-v{PKG_VERSION}-Source.zip`
+5. Modify the first few lines of `aseprite-build-script-macos.sh`, set `TAG_VERSION` and `PKG_VERSION` accordingly.
+5. Run the script
 
-1. DEPS
+## Building
 
-    * Change DEPS path to your main working directory. The working directory will be created for you if it does not already exist.
-
-2. ASEPRITE
-
-    * Path where Aseprite's source code will be unzipped into, this directory is created for you. DO NOT MODIFY!
-
-3. SKIA
-
-    * Path where Skia will be unzipped into, this directory is created for you. DO NOT MODIFY!
-
-4. ASEZIP
-
-    * Determines what URL Aseprite's source code is downloaded from, modify if you are building a different version of aseprite.
-
-5. SKIAZIP
-
-    * Determines what URL Skia is downloaded from, uncomment the version for x64 if you are targeting Intel based Macs. Modify if your version of INSTALL.MD recommends a different version of Skia.
-
-6. ARCH
-
-    * Determines which architecture you are targeting, uncomment intel if you are targeting Intel based Macs.
-
-## Updating and Changing Architectures
-
-* If you have previously run the script and have changed the URL for ASEZIP, please make sure to delete the previous aseprite directory in the working directory (DEPS).
-
-* If you have previously run the script and are targeting a different architecure than before or you change the URL for SKIAZIP, please make sure to delete the skia directory in the working directory (DEPS).
-
-## Details
-
-After adjusting paths to fit your build environment simply execute the script and it will run completely hands off, creating your specified working directory and all subdirectories if they do not already exist.
+After adjusting version identifiers, simply execute the script and it will run completely hands off. Creating your specified working directory and all subdirectories if they do not already exist.
 
 Aseprite source code and a pre-built copy of Skia are curled into the temp directory and extracted into their respective subdirectories.
 
 The script will then begin the build process based on instructions from [INSTALL.md](https://github.com/aseprite/aseprite/blob/v1.3.14.4/INSTALL.md).
 
-Upon completion the script will output a DIR command displaying the newly compiled Aseprite located in the
-$ASEPRITE\build\bin directory. You can copy the executable and data folder located in the previously mentioned bin directory into a new folder named aseprite.app and it will function as a normal macOS application.
+Upon completion the script will output a DIR command displaying the newly compiled Aseprite located in the `$PROJECT_DIR/build/aseprite-{PKG_VERSION}/build/bin/Aseprite.app` directory. You can copy that folder to your `/Applications` and run it just like a normal macOS application.
 
 Enjoy using Aseprite!
