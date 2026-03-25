@@ -200,14 +200,7 @@ fi
 
 if [ "$?" -eq 0 ]; then
     run ninja aseprite
-    if [ "$?" -eq 0 ]; then
-        echo_check "Build complete!"
-        echo "Finished build is located in the $ASEPRITE/build/bin directory."
-        ls -l $ASEPRITE/build/bin/
-        echo "The aseprite executable and data folder listed above can be moved into a new folder named "
-        echo "aseprite.app in order to function as a standard macOS application."
-        exit 0
-    else
+    if [ "$?" -ne 0 ]; then
         echo_cross "Failed to compile"
         echo "Are you using the correct version of Skia?"
         echo "If you edited aseprite's source code you may have made an error, consult the compiler's output."
@@ -222,3 +215,13 @@ else
     echo "Fatal error. Aborting..."
     exit 1
 fi
+
+ICON_LOC=$ASEPRITE/build/bin/Aseprite.app/Contents/Resources/Aseprite.icns
+if [[ ! -s "$ICON_LOC" ]]; then
+    run curl -L -o $ICON_LOC https://github.com/dominickjohn/aseprite-big-sur-icon/raw/main/AsepriteSurIcon.icns
+fi
+
+echo_check "Build complete!"
+echo "Finished build is located in the $ASEPRITE/build/bin directory."
+ls -l $ASEPRITE/build/bin
+echo_info "Copy Aseprite.app to your /Applications and run it like a standard macOS application."
